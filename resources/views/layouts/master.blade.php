@@ -18,6 +18,12 @@
     <link rel="stylesheet" href="{{ asset('user/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('/user/css/color.css') }}">
 
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
 </head>
 
 <body>
@@ -234,78 +240,33 @@
         <div id="backtotop"><a href="#"></a></div>
 
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    toastr.error('{{ $error }}', '');
+                @endforeach
+            @endif
+
+            @if (session('success'))
+                toastr.success('{{ session('success') }}', '');
+            @endif
+
+            @if (session('error'))
+                toastr.error('{{ session('error') }}', '');
+            @endif
+        });
+    </script>
+
+    
+       
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
         <!-- Scripts
 ================================================== -->
 
-        <!-- GOOGLE PLACES AND AUTOCOMPLETE  -->
-        <script>
-            var placeSearch, autocomplete;
-            var componentForm = {
-                street_number: 'short_name',
-                route: 'long_name',
-                locality: 'long_name',
-                administrative_area_level_1: 'short_name',
-                country: 'long_name',
-                postal_code: 'short_name'
-            };
-
-            function initAutocomplete() {
-                // Create the autocomplete object, restricting the search to geographical
-                // location types.
-                autocomplete = new google.maps.places.Autocomplete(
-                    /** @type {!HTMLInputElement} */
-                    (document.getElementById('autocomplete')), {
-                        types: ['geocode']
-                    });
-
-                // When the user selects an address from the dropdown, populate the address
-                // fields in the form.
-                autocomplete.addListener('place_changed', fillInAddress);
-            }
-
-            function fillInAddress() {
-                // Get the place details from the autocomplete object.
-                var place = autocomplete.getPlace();
-
-                for (var component in componentForm) {
-                    document.getElementById(component).value = '';
-                    document.getElementById(component).disabled = false;
-                }
-
-                // Get each component of the address from the place details
-                // and fill the corresponding field on the form.
-                for (var i = 0; i < place.address_components.length; i++) {
-                    var addressType = place.address_components[i].types[0];
-                    if (componentForm[addressType]) {
-                        var val = place.address_components[i][componentForm[addressType]];
-                        document.getElementById(addressType).value = val;
-                    }
-                }
-            }
-
-            // Bias the autocomplete object to the user's geographical location,
-            // as supplied by the browser's 'navigator.geolocation' object.
-            function geolocate() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
-                        var geolocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        var circle = new google.maps.Circle({
-                            center: geolocation,
-                            radius: position.coords.accuracy
-                        });
-                        autocomplete.setBounds(circle.getBounds());
-                    });
-                }
-            }
-        </script>
-        <script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxkyVw9JMI0N6HBsjIKelYK337j81RNec&libraries=places&callback=initAutocomplete"
-            async defer></script>
-        <!-- Scripts
-================================================== -->
+       
         <script type="text/javascript" src="{{ asset('user/scripts/jquery-3.4.1.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('user/scripts/jquery-migrate-3.1.0.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('user/scripts/chosen.min.js') }}"></script>
@@ -319,32 +280,7 @@
         <script type="text/javascript" src="{{ asset('user/scripts/tooltips.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('user/scripts/custom.js') }}"></script>
 
-        
-
-        <!-- Google Autocomplete -->
-        <script>
-            function initAutocomplete() {
-                var input = document.getElementById('autocomplete-input');
-                var autocomplete = new google.maps.places.Autocomplete(input);
-
-                autocomplete.addListener('place_changed', function() {
-                    var place = autocomplete.getPlace();
-                    if (!place.geometry) {
-                        window.alert("No details available for input: '" + place.name + "'");
-                        return;
-                    }
-                });
-            }
-        </script>
-        {{-- 
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxkyVw9JMI0N6HBsjIKelYK337j81RNec&libraries=places">
-        </script> --}}
-
-
-        <script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxkyVw9JMI0N6HBsjIKelYK337j81RNec&libraries=places&callback=initAutocomplete"
-            async defer></script>
-
+   
 
 
 
@@ -354,6 +290,5 @@
 
 </body>
 
-<!-- Mirrored from www.vasterad.com/themes/findeo_updated/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 02 Apr 2024 16:03:06 GMT -->
 
 </html>
